@@ -1,4 +1,4 @@
-FROM php:7.1-fpm
+FROM php:8.1-fpm
 
 WORKDIR /var/www
 
@@ -9,14 +9,18 @@ RUN apt-get update && apt-get install -y \
     wget \
     git \
     unzip \
-    libicu-dev
+    libfreetype6-dev \
+    libicu-dev \
+    libonig-dev \
+    libzip-dev
 
 # PHP拡張のインストール
 RUN docker-php-ext-install \
     intl \
-    mbstring
+    mbstring \
+    zip
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Composerのインストール
-COPY --from=composer:2.2 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer

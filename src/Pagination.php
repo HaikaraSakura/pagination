@@ -4,37 +4,18 @@ declare(strict_types=1);
 
 namespace Haikara\Pagination;
 
-use Traversable;
+use Generator;
 
 /**
  * ページネーションクラス。ページ番号の配列を生成する。
  */
 class Pagination implements PaginationInterface
 {
-    /**
-     * @var RangeInterface
-     */
-    protected $range;
-
-    /**
-     * @var int
-     */
-    protected $display;
-
-    /**
-     * @var CurrentInterface
-     */
-    protected $current;
-
-    /**
-     * @var int
-     */
-    protected $total;
-
-    /**
-     * @var int 全ページ数
-     */
-    protected $last;
+    protected RangeInterface $range;
+    protected int $display;
+    protected CurrentInterface $current;
+    protected int $total;
+    protected int $last;
 
     /**
      * @param int $range ページネーションとして表示するページ番号の数
@@ -140,7 +121,7 @@ class Pagination implements PaginationInterface
     }
 
     /** @inheritDoc */
-    public function getIterator(): Traversable
+    public function getIterator(): Generator
     {
         $pages = $this->range->getPages(
             $this->current,

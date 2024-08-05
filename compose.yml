@@ -1,8 +1,8 @@
 version: '3'
 
 services:
-  php71:
-    build: ./docker/php71
+  php81:
+    build: docker/php81
     volumes:
       - ./:/var/www
     environment:

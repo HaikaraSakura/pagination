@@ -10,36 +10,28 @@ use Haikara\Pagination\Exceptions\CurrentException;
 class Current implements CurrentInterface, JsonSerializable
 {
     /**
-     * @var int
-     */
-    protected $value;
-
-    /**
      * @throws CurrentException
      */
-    public function __construct(int $current)
+    public function __construct(protected readonly int $value)
     {
-        if (!self::isPositiveInteger($current)) {
+        if (!self::isPositiveInteger($this->value)) {
             throw new CurrentException();
         }
-
-        $this->value = $current;
     }
 
+    /**
+     * @param int $current
+     * @param int $last
+     * @return CurrentInterface
+     */
     public static function createWithinRange(int $current, int $last): CurrentInterface
     {
-        if (
-            $last < self::FIRST
-            || $current < self::FIRST
-        ) {
-            return new static(self::FIRST);
-        }
-
-        if ($current > $last) {
-            return new static($last);
-        }
-
-        return new static($current);
+        return new static(match (true) {
+            $last < self::FIRST,
+            $current < self::FIRST => self::FIRST,
+            $current > $last => $last,
+            default => $current
+        });
     }
 
     private static function isPositiveInteger(int $current): bool
@@ -57,10 +49,6 @@ class Current implements CurrentInterface, JsonSerializable
         return (string)$this->value;
     }
 
-    /**
-     * json_encode()された場合に呼ばれる。
-     * valueを返す。
-     */
     public function jsonSerialize(): int
     {
         return $this->value;

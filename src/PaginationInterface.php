@@ -83,9 +83,4 @@ interface PaginationInterface extends JsonSerializable, IteratorAggregate
      * @return int 表示するデータの最大件数を取得
      */
     public function getLimit(): int;
-
-    /**
-     * @return Traversable<int>
-     */
-    public function getIterator(): Traversable;
 }

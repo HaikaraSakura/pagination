@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Haikara\Pagination\Current;
 use Haikara\Pagination\Exceptions\CurrentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class CurrentTest extends TestCase
@@ -21,8 +22,7 @@ class CurrentTest extends TestCase
     }
 
     /**
-     * インスタンス化の異常系
-     *
+     * 現在ページとして1未満の値を渡すと例外が発生する
      * @return void
      */
     public function testConstructFail(): void
@@ -54,20 +54,19 @@ class CurrentTest extends TestCase
 
     /**
      * createWithinRangeの、currentがlastより小さい範囲内の場合
-     *
-     * @dataProvider withinRangeProvider
      * @param int $current
      * @param int $last
      * @param int $result
      * @return void
      */
+    #[DataProvider('withinRangeProvider')]
     public function testCreateWithinRange(int $current, int $last, int $result): void
     {
         $current = Current::createWithinRange($current, $last);
         self::assertSame($current->get(), $result);
     }
 
-    public function withinRangeProvider(): array
+    public static function withinRangeProvider(): array
     {
         return [
             ['current' => 3, 'last' => 5, 'result' => 3],
