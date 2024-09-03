@@ -1,0 +1,14 @@
+services:
+  php81:
+    build: docker/php81
+    volumes:
+      - ./:/var/www
+    environment:
+      COMPOSER_ALLOW_SUPERUSER: 1
+
+  php83:
+    build: docker/php83
+    volumes:
+      - ./:/var/www
+    environment:
+      COMPOSER_ALLOW_SUPERUSER: 1
